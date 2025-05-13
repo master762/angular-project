@@ -1,0 +1,143 @@
+.wrapper {
+  display: flex;
+  width: 100%;
+  height: 600px;
+}
+.left,
+.right {
+  width: 50%;
+  height: 100%;
+}
+
+.top,
+.bottom {
+  width: 100%;
+}
+.top {
+  height: 54.67%;
+}
+.bottom {
+  height: 45.33%;
+}
+.bottom {
+  display: flex;
+}
+.airpods,
+.vision {
+  width: 50%;
+  padding-right: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  position: relative;
+  h2 {
+    font-size: 29px;
+    font-style: italic;
+    line-height: 40px;
+    width: 160px;
+    margin-top: 64px;
+    margin-bottom: 8px;
+  }
+  p {
+    font-size: 14px;
+    font-style: italic;
+    line-height: 24px;
+    color: #909090;
+    width: 160px;
+  }
+}
+.airpods {
+  background-color: #ededed;
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
+.vision {
+  background-color: #353535;
+  img {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+  }
+  h2 {
+    color: white;
+  }
+}
+
+.right {
+  background-color: #ededed;
+}
+.top {
+  padding-right: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  position: relative;
+  h2,
+  p {
+    width: 338px;
+  }
+  h2 {
+    margin-top: 100px;
+    font-style: italic;
+    font-size: 49px;
+    line-height: 40px;
+    margin-bottom: 16px;
+  }
+  p {
+    font-style: italic;
+    font-size: 14px;
+    line-height: 24px;
+    color: #909090;
+  }
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
+.right {
+  padding-left: 56px;
+  position: relative;
+  img {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+  }
+  h2 {
+    margin-top: 204px;
+    margin-bottom: 16px;
+    font-size: 64px;
+    font-weight: 400;
+    line-height: 56px;
+    width: 360px;
+  }
+  span {
+    font-style: italic;
+  }
+  p {
+    font-size: 14px;
+    font-style: italic;
+    line-height: 24px;
+    color: #909090;
+    width: 360px;
+  }
+  button {
+    width: 188px;
+    height: 56px;
+    border: 1px solid black;
+    background: transparent;
+    margin-top: 16px;
+    border-radius: 6px;
+    span {
+      font-size: 16px;
+      line-height: 24px;
+      font-style: italic;
+      color: black;
+    }
+  }
+}
