@@ -1,0 +1,149 @@
+<app-header></app-header>
+<section class="product">
+    <div class="container">
+        <div class="flex">
+            <div class="item">
+                <div class="manyPhoto">
+                    <img *ngFor="let img of productImages; let i = index" [src]="img" [alt]="'Product image ' + i"
+                        [class.active]="selectedImageIndex === i" (click)="selectImage(i)">
+                </div>
+                <div class="mainPhoto">
+                    <img [src]="productImages[selectedImageIndex]" alt="Main product image">
+                </div>
+            </div>
+            <div class="description">
+                <h2 class="abeezee">Apple iPhone 14 Pro Max</h2>
+                <div class="price">
+                    <p class="abeezee">$1399</p>
+                    <p class="abel">$1499</p>
+                </div>
+                <div class="components">
+                    <div class="component">
+                        <img src="/img/phone.png" alt="">
+                        <div>
+                            <p class="abel">Screen size </p>
+                            <p class="abeezee">6.7"</p>
+                        </div>
+                    </div>
+                    <div class="component">
+                        <img src="/img/cpu.png" alt="">
+                        <div>
+                            <p class="abel">CPU</p>
+                            <p class="abeezee">Apple A16 Bionic</p>
+                        </div>
+                    </div>
+                    <div class="component">
+                        <img src="/img/cores.png" alt="">
+                        <div>
+                            <p class="abel">Number of Cores</p>
+                            <p class="abeezee">6</p>
+                        </div>
+                    </div>
+                    <div class="component">
+                        <img src="/img/Maincamera.png" alt="">
+                        <div>
+                            <p class="abel">Main camera </p>
+                            <p class="abeezee"> 48-12 -12 MP</p>
+                        </div>
+                    </div>
+                    <div class="component">
+                        <img src="/img/frontCamera.png" alt="">
+                        <div>
+                            <p class="abel">Front-camera</p>
+                            <p class="abeezee">12 MP</p>
+                        </div>
+                    </div>
+                    <div class="component">
+                        <img src="/img/battarey.png" alt="">
+                        <div>
+                            <p class="abel">Battery capacity</p>
+                            <p class="abeezee">4323 mAh</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="textDesc">
+                    <p class="abel">Enhanced capabilities thanks toan enlarged display of 6.7 inchesand work without
+                        rechargingthroughout
+                        the day. Incredible photosas in weak, yesand in bright lightusing the new systemwith two cameras
+                        <span>more...</span>
+                    </p>
+                </div>
+                <div class="btns">
+                    <button><span class="abeezee">Add to Wishlist</span></button>
+                    <button><span class="abeezee">Add to Card</span></button>
+                </div>
+                <div class="sideInfo">
+                    <div class="info">
+                        <div class="logo">
+                            <img src="/img/DeliveryTruck.svg" alt="">
+                        </div>
+                        <div>
+                            <p class="abeezee">Free Delivery</p>
+                            <p class="abeezee">1-2 day</p>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <div class="logo">
+                            <img src="/img/store.svg" alt="">
+                        </div>
+                        <div>
+                            <p class="abeezee">In Store</p>
+                            <p class="abeezee">today</p>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <div class="logo">
+                            <img src="/img/verify.png" alt="">
+                        </div>
+                        <div>
+                            <p class="abeezee">Guaranteed</p>
+                            <p class="abeezee">1 year</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="details">
+    <div class="container detailsContainer">
+        <h2 class="abeezee">Details</h2>
+        <p class="detailsDesc abeezee">Just as a book is judged by its cover, the first thing you notice when you pick
+            up a
+            modern smartphone is the
+            display. Nothing surprising, because advanced technologies allow you to practically level the display frames
+            and cutouts for the front camera and speaker, leaving no room for bold design solutions. And how good that
+            in such realities Apple everything is fine with displays. Both critics and mass consumers always praise the
+            quality of the picture provided by the products of the Californian brand. And last year's 6.7-inch Retina
+            panels, which had ProMotion, caused real admiration for many.</p>
+        <div class="options">
+            <p class="abel">Screen diagonal</p>
+            <p class="abel">6.7"</p>
+        </div>
+        <div class="options">
+            <p class="abel">The screen resolution</p>
+            <p class="abel">2796x1290</p>
+        </div>
+        <div class="options">
+            <p class="abel">The screen refresh rate</p>
+            <p class="abel">120 Hz</p>
+        </div>
+        <div class="options">
+            <p class="abel">The pixel density</p>
+            <p class="abel">460 ppi"</p>
+        </div>
+        <div class="options">
+            <p class="abel">Screen type</p>
+            <p class="abel">OLED</p>
+        </div>
+        <div class="options">
+            <p class="abel">Additionally</p>
+            <p class="abel">Dynamic Island Always-On display HDR display True Tone Wide color (P3)</p>
+        </div>
+        <div class="options">
+            <p class="abel">CPU</p>
+            <p class="abel">A16 Bionic</p>
+        </div>
+    </div>
+</section>
+<app-footer></app-footer>

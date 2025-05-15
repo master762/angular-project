@@ -5,12 +5,39 @@ section {
   display: flex;
   gap: 32px;
   align-items: center;
+
   p {
     color: #8b8b8b;
     font-style: italic;
     font-size: 18px;
     line-height: 32px;
     cursor: pointer;
+    position: relative;
+    padding-bottom: 4px;
+    transition: all 0.3s ease-out;
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background-color: black;
+      transition: width 0.3s ease-out;
+    }
+
+    &:hover {
+      color: #555;
+    }
+
+    &.active {
+      color: black;
+      font-style: normal;
+
+      &::after {
+        width: 100%;
+      }
+    }
   }
 }
 .products {
@@ -19,6 +46,8 @@ section {
   justify-content: space-between;
   margin-top: 32px;
   margin-bottom: 56px;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 .product {
   border-radius: 9px;
@@ -27,16 +56,38 @@ section {
   min-height: 456px;
   background-color: #f6f6f6;
   padding: 24px 16px;
+  transition: 0.3s;
+  &:hover {
+    transform: scale(1.05);
+    border: 1px solid black;
+    background-color: #e2e1e1;
+  }
 }
 .like {
   display: flex;
   align-items: center;
   justify-content: end;
+  cursor: pointer;
 }
+.like-icon {
+  fill: none;
+  stroke: #666;
+  stroke-width: 2;
+  transition: all 0.3s ease;
+
+  &.liked {
+    fill: red;
+    stroke: red;
+  }
+}
+
 .item {
   margin: 16px auto;
   width: 160px;
   height: 160px;
+  img {
+    user-select: none;
+  }
 }
 .text {
   text-align: center;
@@ -55,6 +106,21 @@ section {
 }
 .btnContainer {
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
+  button {
+    width: 186px;
+    height: 48px;
+    background-color: black;
+    border-radius: 8px;
+    margin-top: 24px;
+    cursor: pointer;
+    span {
+      color: white;
+      font-size: 14px;
+      font-style: italic;
+      line-height: 24px;
+    }
+  }
 }

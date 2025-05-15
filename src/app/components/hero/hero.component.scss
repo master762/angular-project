@@ -6,12 +6,15 @@ section {
     rgba(33, 28, 36, 1) 0%,
     rgba(33, 28, 36, 1) 100%
   );
-}
-.flex {
   display: flex;
-  height: 100%;
+  justify-content: space-between;
+  padding: 0 160px;
 }
+
 .text {
+  margin: auto 0;
+  width: 714px;
+  height: 380px;
   margin: auto 0;
 }
 p {
@@ -35,19 +38,9 @@ h2 {
   line-height: 24px;
 }
 button {
+  margin-top: 148px;
   width: 188px;
   height: 56px;
-  border: 1px solid white;
-  border-radius: 6px;
-  background: transparent;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
 
   span {
     color: white;
@@ -58,50 +51,7 @@ button {
     z-index: 2;
     transition: color 0.3s ease;
   }
-
-  &:hover {
-    border-color: rgba(255, 255, 255, 0.8);
-
-    span {
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    &::before {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-
-  &:active {
-    transform: scale(0.96);
-  }
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateX(-100%);
-    opacity: 0;
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    z-index: 1;
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    border-color: rgba(255, 255, 255, 0.4);
-
-    span {
-      color: rgba(255, 255, 255, 0.6);
-    }
-  }
+}
+.image img {
+  height: 100%;
 }
