@@ -1,85 +1,128 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  discount_price: number | null;
+  images: string[];
+  rating?: number;
+  isLiked?: boolean;
+  displayPrice?: number;
+}
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, FormsModule, CurrencyPipe],
+  imports: [CommonModule, FormsModule, CurrencyPipe, HttpClientModule],
   templateUrl: './products.component.html',
-  styleUrl: './products.component.scss'
+  styleUrls: ['./products.component.scss']
 })
-export class ProductsComponent {
+export class ProductsComponent implements OnInit {
   filters = ['New Arrival', 'Bestseller', 'Featured Products'];
-  activeFilter = this.filters[0]; 
-    products = [
-    {
-      name: 'Apple iPhone 14 Pro Max 128GB Deep Purple (MQ9T3RX/A)',
-      price: 900,
-      image: '/img/Iphone.png',
-      isLiked: false
-    },
-    {
-      name: 'Blackmagic Pocket Cinema Camera 6k',
-      price: 2535,
-      image: '/img/camera.png',
-      isLiked: false
-    },
-    {
-      name: 'Apple Watch Series 9 GPS 41mm Starlight Aluminium Case',
-      price: 399,
-      image: '/img/apple-wath.png',
-      isLiked: false
-    },
-      {
-      name: 'AirPods Max Silver',
-      price: 549,
-      image: '/img/appleairpods.png',
-      isLiked: false
-    },
-      {
-      name: 'Samsung Galaxy Watch6 Classic 47mm Black',
-      price: 369,
-      image: '/img/samsung-wath.png',
-      isLiked: false
-    },
-      {
-      name: 'Galaxy Z Fold5 Unlocked | 256GB | Phantom Black',
-      price: 1799,
-      image: '/img/galaxyZ.png',
-      isLiked: true
-    },
-      {
-      name: 'Galaxy Buds FE Graphite',
-      price: 99.99,
-      image: '/img/buds.png',
-      isLiked: false
-    },
-      {
-      name: 'Apple iPad 9 10.2" 64GB Wi-Fi Silver (MK2L3) 2021',
-      price: 398,
-      image: '/img/ipad.png',
-      isLiked: false
-    },
-    //   {
-    //   name: 'Apple iPhone 14 Pro 512GB Gold (MQ233)',
-    //   price: 1437,
-    //   image: '/img/Iphone512.png',
-    //   isLiked: false
-    // },
-    //   {
-    //   name: 'Apple iPhone 14 Pro 1TB Gold (MQ2V3)',
-    //   price: 1499,
-    //   image: '/img/Iphone1tb.png',
-    //   isLiked: false
-    // },
-    
+  activeFilter = this.filters[0];
+  allProducts: Product[] = [];
+  displayedProducts: Product[] = [];
+  isLoading = true;
+  error: string | null = null;
+  baseUrl = 'http://localhost:1452';
 
-  ];
- setActiveFilter(filter: string) {
-    this.activeFilter = filter;
+  // Пагинация
+  currentPage = 1;
+  itemsPerPage = 8;
+  totalPages = 1;
+  visiblePages: number[] = [];
+
+  constructor(private http: HttpClient) {}
+
+  ngOnInit(): void {
+    this.fetchProducts();
   }
-  toggleLike(product: any) {
+
+  fetchProducts(): void {
+    this.http.get<Product[]>('http://localhost:1452/api/products/').subscribe({
+      next: (data) => {
+        this.allProducts = data.map(product => ({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          discount_price: product.discount_price,
+          images: product.images || [],
+          rating: product.rating,
+          isLiked: false,
+          displayPrice: product.discount_price || product.price
+        }));
+        
+        this.calculatePagination();
+        this.updateDisplayedProducts();
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.error = 'Failed to load products. Please try again later.';
+        this.isLoading = false;
+        console.error('Error fetching products:', err);
+      }
+    });
+  }
+
+  private calculatePagination(): void {
+    this.totalPages = Math.ceil(this.allProducts.length / this.itemsPerPage);
+    this.updateVisiblePages();
+  }
+
+private updateVisiblePages(): void {
+  if (this.totalPages <= 5) {
+    this.visiblePages = Array.from({length: this.totalPages}, (_, i) => i + 1);
+  } else {
+    if (this.currentPage <= 3) {
+      this.visiblePages = [1, 2, 3, 4, this.totalPages];
+    } else if (this.currentPage >= this.totalPages - 2) {
+      this.visiblePages = [1, this.totalPages - 3, this.totalPages - 2, this.totalPages - 1, this.totalPages];
+    } else {
+      this.visiblePages = [1, this.currentPage - 1, this.currentPage, this.currentPage + 1, this.totalPages];
+    }
+  }
+}
+
+  private updateDisplayedProducts(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    this.displayedProducts = this.allProducts.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  changePage(page: number): void {
+    if (page < 1 || page > this.totalPages || page === this.currentPage) return;
+    this.currentPage = page;
+    this.updateDisplayedProducts();
+    this.updateVisiblePages();
+  }
+
+  nextPage(): void {
+    this.changePage(this.currentPage + 1);
+  }
+
+  prevPage(): void {
+    this.changePage(this.currentPage - 1);
+  }
+
+  public getProductImage(product: Product): string {
+    if (!product.images || product.images.length === 0) {
+      return '/assets/default-product.png';
+    }
+    if (product.images[0].startsWith('http')) {
+      return product.images[0];
+    }
+    return `${this.baseUrl}/${product.images[0]}`.replace(/([^:]\/)\/+/g, '$1');
+  }
+
+  setActiveFilter(filter: string): void {
+    this.activeFilter = filter;
+    // Здесь можно добавить фильтрацию продуктов
+  }
+
+  toggleLike(product: Product): void {
     product.isLiked = !product.isLiked;
   }
 }
