@@ -2,24 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  discount_price: number | null;
-  images: string[];
-  rating?: number;
-  isLiked?: boolean;
-  displayPrice?: number;
-}
+import { Product } from '../../../interfaces';
 
 @Component({
   selector: 'app-products',
   standalone: true,
   imports: [CommonModule, FormsModule, CurrencyPipe, HttpClientModule],
   templateUrl: './products.component.html',
-  styleUrls: ['./products.component.scss']
+  styleUrls: ['./products.component.scss'],
 })
 export class ProductsComponent implements OnInit {
   filters = ['New Arrival', 'Bestseller', 'Featured Products'];
@@ -32,7 +22,7 @@ export class ProductsComponent implements OnInit {
 
   // Пагинация
   currentPage = 1;
-  itemsPerPage = 8;
+  itemsPerPage = 9;
   totalPages = 1;
   visiblePages: number[] = [];
 
@@ -41,11 +31,31 @@ export class ProductsComponent implements OnInit {
   ngOnInit(): void {
     this.fetchProducts();
   }
+  ratingSortDirection: 'asc' | 'desc' = 'desc';
+  toggleRatingSort(): void {
+    // Меняем направление сортировки
+    this.ratingSortDirection =
+      this.ratingSortDirection === 'desc' ? 'asc' : 'desc';
 
+    // Сортируем продукты
+    this.allProducts.sort((a, b) => {
+      const ratingA = a.rating || 0;
+      const ratingB = b.rating || 0;
+
+      return this.ratingSortDirection === 'desc'
+        ? ratingB - ratingA
+        : ratingA - ratingB;
+    });
+
+    // Обновляем отображение
+    this.currentPage = 1;
+    this.updateDisplayedProducts();
+    this.updateVisiblePages();
+  }
   fetchProducts(): void {
     this.http.get<Product[]>('http://localhost:1452/api/products/').subscribe({
       next: (data) => {
-        this.allProducts = data.map(product => ({
+        this.allProducts = data.map((product) => ({
           id: product.id,
           name: product.name,
           price: product.price,
@@ -53,9 +63,9 @@ export class ProductsComponent implements OnInit {
           images: product.images || [],
           rating: product.rating,
           isLiked: false,
-          displayPrice: product.discount_price || product.price
+          displayPrice: product.discount_price || product.price,
         }));
-        
+
         this.calculatePagination();
         this.updateDisplayedProducts();
         this.isLoading = false;
@@ -64,7 +74,7 @@ export class ProductsComponent implements OnInit {
         this.error = 'Failed to load products. Please try again later.';
         this.isLoading = false;
         console.error('Error fetching products:', err);
-      }
+      },
     });
   }
 
@@ -73,23 +83,41 @@ export class ProductsComponent implements OnInit {
     this.updateVisiblePages();
   }
 
-private updateVisiblePages(): void {
-  if (this.totalPages <= 5) {
-    this.visiblePages = Array.from({length: this.totalPages}, (_, i) => i + 1);
-  } else {
-    if (this.currentPage <= 3) {
-      this.visiblePages = [1, 2, 3, 4, this.totalPages];
-    } else if (this.currentPage >= this.totalPages - 2) {
-      this.visiblePages = [1, this.totalPages - 3, this.totalPages - 2, this.totalPages - 1, this.totalPages];
+  private updateVisiblePages(): void {
+    if (this.totalPages <= 5) {
+      this.visiblePages = Array.from(
+        { length: this.totalPages },
+        (_, i) => i + 1
+      );
     } else {
-      this.visiblePages = [1, this.currentPage - 1, this.currentPage, this.currentPage + 1, this.totalPages];
+      if (this.currentPage <= 3) {
+        this.visiblePages = [1, 2, 3, 4, this.totalPages];
+      } else if (this.currentPage >= this.totalPages - 2) {
+        this.visiblePages = [
+          1,
+          this.totalPages - 3,
+          this.totalPages - 2,
+          this.totalPages - 1,
+          this.totalPages,
+        ];
+      } else {
+        this.visiblePages = [
+          1,
+          this.currentPage - 1,
+          this.currentPage,
+          this.currentPage + 1,
+          this.totalPages,
+        ];
+      }
     }
   }
-}
 
   private updateDisplayedProducts(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    this.displayedProducts = this.allProducts.slice(startIndex, startIndex + this.itemsPerPage);
+    this.displayedProducts = this.allProducts.slice(
+      startIndex,
+      startIndex + this.itemsPerPage
+    );
   }
 
   changePage(page: number): void {
@@ -106,11 +134,7 @@ private updateVisiblePages(): void {
   prevPage(): void {
     this.changePage(this.currentPage - 1);
   }
-
   public getProductImage(product: Product): string {
-    if (!product.images || product.images.length === 0) {
-      return '/assets/default-product.png';
-    }
     if (product.images[0].startsWith('http')) {
       return product.images[0];
     }
@@ -119,7 +143,6 @@ private updateVisiblePages(): void {
 
   setActiveFilter(filter: string): void {
     this.activeFilter = filter;
-    // Здесь можно добавить фильтрацию продуктов
   }
 
   toggleLike(product: Product): void {

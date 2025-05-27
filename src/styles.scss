@@ -18,8 +18,29 @@ ol {
 }
 
 .container {
-  width: 1120px;
+  max-width: 1120px;
+  width: 100%;
   margin: 0 auto;
+}
+@media (max-width: 1120px) {
+  .container {
+    max-width: 800px;
+  }
+}
+@media (max-width: 800px) {
+  .container {
+    max-width: 600px;
+  }
+}
+@media (max-width: 600px) {
+  .container {
+    max-width: 373px;
+  }
+}
+@media (max-width: 373px) {
+  .container {
+    max-width: 344px;
+  }
 }
 .abel {
   font-family: "Abel", sans-serif;
