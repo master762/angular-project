@@ -1,11 +1,11 @@
 import { Component, HostListener } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-  imports: [RouterLink, RouterOutlet],
+  imports: [RouterLink, ],
 })
 export class HeaderComponent {
   isModalOpen = false;

@@ -8,6 +8,7 @@ import { PopularproductsComponent } from "../../components/popularproducts/popul
 import { DiscountsComponent } from "../../components/discounts/discounts.component";
 import { HerofooterComponent } from "../../components/herofooter/herofooter.component";
 import { FooterComponent } from "../../components/footer/footer.component";
+import { ProductMainPageComponent } from "../../components/product-main-page/product-main-page.component";
 
 
 @Component({
@@ -15,6 +16,6 @@ import { FooterComponent } from "../../components/footer/footer.component";
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   standalone: true, 
-  imports: [HeaderComponent, HeroComponent, PopularitemsComponent, CategoriesComponent, ProductsComponent, PopularproductsComponent, DiscountsComponent, HerofooterComponent, FooterComponent]
+  imports: [HeaderComponent, HeroComponent, PopularitemsComponent, CategoriesComponent, ProductsComponent, PopularproductsComponent, DiscountsComponent, HerofooterComponent, FooterComponent, ProductMainPageComponent]
 })
 export class HomeComponent {}

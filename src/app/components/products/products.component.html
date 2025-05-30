@@ -2,34 +2,17 @@
   <div *ngIf="isLoading" class="loading">Loading products...</div>
   <div *ngIf="error" class="error">{{ error }}</div>
   <div *ngIf="!isLoading && !error">
-    <!-- <div class="filter">
-        <p
-          class="abeezee"
-          *ngFor="let filter of filters"
-          [class.active]="activeFilter === filter"
-          (click)="setActiveFilter(filter)"
-        >
-          {{ filter }}
-        </p>
-      </div> -->
+    <div class="filter">
+
+    </div>
     <div class="filter">
       <p class="abeezee">
         Selected Products: <span class="abeezee">{{ allProducts.length }}</span>
       </p>
-      <button
-        class="rating"
-        (click)="toggleRatingSort()"
-        [class.active]="ratingSortDirection !== null"
-      >
+      <button class="rating" (click)="toggleRatingSort()" [class.active]="ratingSortDirection !== null">
         <p class="abel">By rating</p>
-        <svg
-          width="14"
-          height="8"
-          viewBox="0 0 14 8"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          [class.asc]="ratingSortDirection === 'asc'"
-        >
+        <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg"
+          [class.asc]="ratingSortDirection === 'asc'">
           <path d="M1 1L7 7L13 1" stroke="currentColor" />
         </svg>
       </button>
@@ -37,16 +20,9 @@
     <div class="products">
       <div class="product" *ngFor="let product of displayedProducts">
         <div class="like" (click)="toggleLike(product)">
-          <svg
-            class="like-icon"
-            [class.liked]="product.isLiked"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-          >
+          <svg class="like-icon" [class.liked]="product.isLiked" width="24" height="24" viewBox="0 0 24 24">
             <path
-              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-            />
+              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
           </svg>
         </div>
         <div class="item">
@@ -57,7 +33,10 @@
           <p class="price abel">{{ product.displayPrice | currency }}</p>
         </div>
         <div class="btnContainer">
-          <button><span class="abeezee">Buy Now</span></button>
+          <a [routerLink]="['/products', product.id]">
+            <button><span class="abeezee">Buy Now</span></button>
+          </a>
+
         </div>
       </div>
     </div>
@@ -67,24 +46,18 @@
         <img src="/img/navArrow.svg" alt="Previous" />
       </button>
 
-      <button
-        *ngFor="let page of visiblePages"
-        [class.active]="page === currentPage"
-        (click)="changePage(page)"
+      <button *ngFor="let page of visiblePages" [class.active]="page === currentPage" (click)="changePage(page)"
         [class.dots]="
           (page === 1 && currentPage > 3) ||
           (page === totalPages && currentPage < totalPages - 2)
-        "
-      >
+        ">
         <span class="abeezee" *ngIf="page !== 1 && page !== totalPages">
           {{ page }}
         </span>
-        <span
-          *ngIf="
+        <span *ngIf="
             (page === 1 && currentPage > 3) ||
             (page === totalPages && currentPage < totalPages - 2)
-          "
-        >
+          ">
           ...
         </span>
         <span *ngIf="page === 1 && currentPage <= 3"> 1 </span>

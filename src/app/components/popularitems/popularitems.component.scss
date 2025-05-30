@@ -1,3 +1,6 @@
+section {
+  height: fit-content;
+}
 .wrapper {
   display: flex;
   width: 100%;
@@ -51,15 +54,17 @@
   img {
     position: absolute;
     top: 0;
-    left: 0;
+    left: -35%;
+    height: 272px;
   }
 }
 .vision {
   background-color: #353535;
+  overflow: hidden;
   img {
     position: absolute;
     top: 50%;
-    left: 0;
+    left: -45%;
     transform: translateY(-50%);
   }
   h2 {
@@ -105,7 +110,7 @@
   img {
     position: absolute;
     top: 50%;
-    right: 0;
+    right: -50%;
     transform: translateY(-50%);
   }
   h2 {
@@ -139,5 +144,67 @@
       font-style: italic;
       color: black;
     }
+  }
+}
+@media (max-width: 1330px) {
+  .wrapper {
+    flex-direction: column;
+  }
+  .left,
+  .right {
+    width: 100%;
+  }
+  .vision img {
+    left: 5%;
+    top: 30%;
+    transform: translateY(-50%);
+  }
+  .airpods img {
+    left: 5%;
+  }
+  .bottom {
+    height: 500px;
+  }
+  .right {
+    img {
+      right: 10px;
+      width: 40%;
+      height: auto;
+    }
+  }
+  section {
+    margin-bottom: 500px;
+  }
+}
+@media (max-width: 1140px) {
+  .vision img,
+  .airpods img {
+    left: -20%;
+  }
+}
+@media (max-width: 900px) {
+  .airpods {
+    img {
+      left: -35%;
+    }
+  }
+  .vision {
+    img {
+      left: -45%;
+    }
+  }
+}
+@media (max-width: 740px) {
+  .bottom {
+    flex-direction: column;
+    height: fit-content;
+  }
+  .airpods {
+    width: 100%;
+    height: fit-content;
+  }
+  .vision {
+    width: 100%;
+    height: fit-content;
   }
 }

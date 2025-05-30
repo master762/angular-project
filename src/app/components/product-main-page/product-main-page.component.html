@@ -1,7 +1,11 @@
 <section>
     <div class="container">
-        <h2 class="abeezee">Discounts up to -50%</h2>
-
+        <div class="filter">
+            <p class="abeezee" *ngFor="let filter of filters" [class.active]="activeFilter === filter"
+                (click)="setActiveFilter(filter)">
+                {{ filter }}
+            </p>
+        </div>
         <div class="products">
             <div class="product" *ngFor="let product of displayedProducts">
                 <div class="like" (click)="toggleLike(product)">

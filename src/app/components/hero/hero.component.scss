@@ -55,3 +55,35 @@ button {
 .image img {
   height: 100%;
 }
+@media (max-width: 1020px) {
+  section {
+    flex-direction: column;
+    height: fit-content;
+    justify-content: center;
+    align-items: center;
+    padding-top: 88px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .text {
+    width: 50%;
+    text-align: center;
+    button {
+      margin: 32px auto;
+    }
+  }
+}
+@media (max-width: 500px) {
+  .image {
+    width: 343px;
+    height: 289px;
+    overflow: hidden;
+    margin-top: 48px;
+    img {
+      width: 343px;
+    }
+  }
+  h1 {
+    font-size: 80px;
+  }
+}

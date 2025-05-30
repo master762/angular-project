@@ -2,15 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Product } from '../../interfaces/product.interface';
+
 @Component({
-  selector: 'app-discounts',
+  selector: 'app-product-main-page',
   standalone: true,
   imports: [CommonModule, CurrencyPipe],
-  templateUrl: './discounts.component.html',
-  styleUrl: './discounts.component.scss'
+  templateUrl: './product-main-page.component.html',
+  styleUrl: './product-main-page.component.scss',
 })
-export class DiscountsComponent implements OnInit{
-    allProducts: Product[] = [];
+export class ProductMainPageComponent implements OnInit {
+  filters = ['New Arrival', 'Bestseller', 'Featured Products'];
+  activeFilter = this.filters[0];
+  allProducts: Product[] = [];
   displayedProducts: Product[] = [];
   baseUrl = 'http://localhost:1452';
 
@@ -28,8 +31,7 @@ export class DiscountsComponent implements OnInit{
           isLiked: false,
           displayPrice: product.discount_price || product.price,
         }));
-
-        this.displayedProducts = this.getRandomProducts(this.allProducts, 4);
+        this.displayedProducts = this.allProducts.slice(0, 8);
       },
       error: () => {
         console.error('Failed to load products.');
@@ -37,8 +39,9 @@ export class DiscountsComponent implements OnInit{
     });
   }
 
-  getRandomProducts(products: Product[], count: number): Product[] {
-    return [...products].sort(() => Math.random() - 0.5).slice(0, count);
+  setActiveFilter(filter: string): void {
+    this.activeFilter = filter;
+    // фильтрация не применяется, так как входные данные не содержат признаков (например, нет метки "new", "featured" и т.п.)
   }
 
   toggleLike(product: Product): void {
@@ -52,5 +55,3 @@ export class DiscountsComponent implements OnInit{
       : `${this.baseUrl}/${imagePath}`.replace(/([^:]\/)\/+/g, '$1');
   }
 }
-
-

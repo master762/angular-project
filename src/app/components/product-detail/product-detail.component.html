@@ -1,0 +1,54 @@
+<section class="product-detail">
+    <div *ngIf="isLoading" class="loading">Loading product...</div>
+    <div *ngIf="error" class="error">{{ error }}</div>
+
+    <div *ngIf="product && !isLoading" class="product-container">
+        <div class="product-images">
+            <div class="main-image">
+                <img [src]="getProductImage(product)" [alt]="product.name" />
+            </div>
+            <div class="thumbnails">
+                <div *ngFor="let image of product.images" class="thumbnail">
+                    <img [src]="image.startsWith('http') ? image : baseUrl + '/' + image" [alt]="product.name" />
+                </div>
+            </div>
+        </div>
+
+        <div class="product-info">
+            <h1 class="product-name">{{ product.name }}</h1>
+
+            <div class="price-section">
+                <span class="price">{{ product.displayPrice | currency }}</span>
+                <span *ngIf="product.discount_price" class="original-price">{{ product.price | currency }}</span>
+            </div>
+
+            <div class="rating-section">
+                <div class="stars">
+                    <span *ngFor="let star of [1,2,3,4,5]">
+                        <svg [class.filled]="star <= (product.rating || 0)" width="20" height="20" viewBox="0 0 24 24">
+                            <path
+                                d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                        </svg>
+                    </span>
+                </div>
+                <span class="rating-value">{{ product.rating || 0 }}/5</span>
+            </div>
+
+            <div class="actions">
+                <button class="like-btn" (click)="toggleLike()">
+                    <svg [class.liked]="product.isLiked" width="24" height="24" viewBox="0 0 24 24">
+                        <path
+                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                    </svg>
+                </button>
+                <button class="buy-btn">Add to Cart</button>
+            </div>
+
+            <div class="description">
+                <h3>Description</h3>
+                <p>Here should be the product description. You might want to add this field to your Product interface if
+                    it's not there already.</p>
+            </div>
+        </div>
+    </div>
+</section>

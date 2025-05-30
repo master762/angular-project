@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Product } from '../../../interfaces';
-
+import { Product } from '../../interfaces/product.interface';
+import { RouterLink} from '@angular/router';
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, FormsModule, CurrencyPipe, HttpClientModule],
+  imports: [CommonModule, FormsModule, CurrencyPipe, HttpClientModule,RouterLink,],
+  
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
 })

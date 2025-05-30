@@ -1,11 +1,46 @@
 section {
-  margin-top: 80px;
+  margin-top: 60px;
 }
-h2 {
-  font-size: 24px;
-  font-style: italic;
-  line-height: 32px;
+.filter {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+
+  p {
+    color: #8b8b8b;
+    font-style: italic;
+    font-size: 18px;
+    line-height: 32px;
+    cursor: pointer;
+    position: relative;
+    padding-bottom: 4px;
+    transition: all 0.3s ease-out;
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background-color: black;
+      transition: width 0.3s ease-out;
+    }
+
+    &:hover {
+      color: #555;
+    }
+
+    &.active {
+      color: black;
+      font-style: normal;
+
+      &::after {
+        width: 100%;
+      }
+    }
+  }
 }
+
 .products {
   display: flex;
   align-items: center;
