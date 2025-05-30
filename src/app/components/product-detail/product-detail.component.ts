@@ -3,7 +3,9 @@ import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Product } from '../../interfaces/product.interface';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http'; // Добавьте этот импорт
-
+import { HeaderComponent } from '../header/header.component';
+import { FooterComponent } from '../footer/footer.component';
+import { RelatedProductsComponent } from '../related-products/related-products.component';
 
 @Component({
   selector: 'app-product-detail',
@@ -12,60 +14,90 @@ import { HttpClient, HttpClientModule } from '@angular/common/http'; // Доба
     CommonModule, 
     CurrencyPipe,
     RouterModule,
-    HttpClientModule // Добавьте этот модуль
+    HttpClientModule,
+    HeaderComponent,
+    FooterComponent,
+    RelatedProductsComponent,
   ],
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss']
 })
 export class ProductDetailComponent implements OnInit {
-  product: Product | null = null;
-  isLoading = true;
-  error: string | null = null;
+  Math = Math;
+  toggleLike(): void {
+  if (this.product) {
+    this.product.isLiked = !this.product.isLiked;
+    // Здесь можно добавить логику сохранения в избранное через сервис
+  }
+}
+   product!: Product;
+  productImages: string[] = [];
+  selectedImageIndex = 0;
   baseUrl = 'http://localhost:1452';
+  
+  // Статические изображения для демонстрации
+ staticImages = [
+    '/img/phone-demo1.jpg',
+    '/img/phone-demo2.jpg',
+    '/img/phone-demo3.jpg'
+  ];
 
-  constructor(
-    private route: ActivatedRoute,
-    private http: HttpClient
-  ) {}
+  constructor(private route: ActivatedRoute, private http: HttpClient) {}
 
   ngOnInit(): void {
-    const productId = this.route.snapshot.paramMap.get('id');
-    if (productId) {
-      this.fetchProduct(productId);
-    } else {
-      this.error = 'Product ID not provided';
-      this.isLoading = false;
-    }
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) this.fetchProduct(id);
   }
 
   fetchProduct(id: string): void {
     this.http.get<Product>(`${this.baseUrl}/api/products/${id}`).subscribe({
-      next: (data) => {
+      next: (product) => {
         this.product = {
-          ...data,
-          displayPrice: data.discount_price || data.price,
-          isLiked: false
+          ...product,
+          displayPrice: product.discount_price || product.price
         };
-        this.isLoading = false;
+        
+        // Основное изображение с бэкенда + статические
+        this.productImages = [
+          product.images[0].startsWith('http') 
+            ? product.images[0] 
+            : `${this.baseUrl}/${product.images[0]}`,
+          ...this.staticImages
+        ];
       },
       error: (err) => {
-        this.error = 'Failed to load product. Please try again later.';
-        this.isLoading = false;
         console.error('Error fetching product:', err);
-      }
+      },
     });
   }
 
-  getProductImage(product: Product): string {
-    if (product.images[0].startsWith('http')) {
-      return product.images[0];
-    }
-    return `${this.baseUrl}/${product.images[0]}`.replace(/([^:]\/)\/+/g, '$1');
+  selectImage(index: number): void {
+    this.selectedImageIndex = index;
   }
+getScreenSize(): string {
+  const sizeChar = this.product.characteristics?.find(c => 
+    c.characteristic.toLowerCase().includes('диагональ')
+  );
+  return sizeChar ? sizeChar.value : '6.7'; // Возвращаем значение в дюймах
+}
 
-  toggleLike(): void {
-    if (this.product) {
-      this.product.isLiked = !this.product.isLiked;
-    }
+getCpuInfo(): string {
+  const cpuChar = this.product.characteristics?.find(c => 
+    c.characteristic.toLowerCase().includes('процессор')
+  );
+  return cpuChar ? `${this.product.brand} ${cpuChar.value}` : 'Apple A16 Bionic';
+}
+
+getBatteryCapacity(): string {
+  const batteryChar = this.product.characteristics?.find(c => 
+    c.characteristic.toLowerCase().includes('аккумулятор')
+  );
+  return batteryChar ? batteryChar.value : '4323';
+}
+  getCharacteristicValue(name: string): string {
+    const char = this.product.characteristics?.find(c => 
+      c.characteristic.toLowerCase().includes(name.toLowerCase())
+    );
+    return char ? `${char.value}${char.unit_type !== 'значение' ? ' ' + char.unit_type : ''}` : 'N/A';
   }
 }
