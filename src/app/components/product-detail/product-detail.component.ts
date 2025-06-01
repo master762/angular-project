@@ -2,16 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Product } from '../../interfaces/product.interface';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { HttpClient, HttpClientModule } from '@angular/common/http'; // Добавьте этот импорт
+import { HttpClient, HttpClientModule } from '@angular/common/http'; 
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
 import { RelatedProductsComponent } from '../related-products/related-products.component';
 import { CartService } from '../../cart.service';
+import { FavoriteService } from '../../favorite.service';
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-   imports: [
+  imports: [
     CommonModule, 
     CurrencyPipe,
     RouterModule,
@@ -24,39 +25,46 @@ import { CartService } from '../../cart.service';
   styleUrls: ['./product-detail.component.scss']
 })
 export class ProductDetailComponent implements OnInit {
-    isAddedToCart = false;
+  isAddedToCart = false;
   showNotification = false;
   notificationMessage = '';
   Math = Math;
-  toggleLike(): void {
-  if (this.product) {
-    this.product.isLiked = !this.product.isLiked;
-    // Здесь можно добавить логику сохранения в избранное через сервис
-  }
-}
-   product!: Product;
+  product!: Product;
   productImages: string[] = [];
   selectedImageIndex = 0;
   baseUrl = 'http://localhost:1452';
   
   // Статические изображения для демонстрации
- staticImages = [
+  staticImages = [
     '/img/phone-demo1.jpg',
     '/img/phone-demo2.jpg',
     '/img/phone-demo3.jpg'
   ];
 
- constructor(
-  private route: ActivatedRoute,
-  private http: HttpClient,
-  
-   private cartService: CartService
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private cartService: CartService,
+    private favoriteService: FavoriteService
   ) {}
 
   addToCart(): void {
     if (this.product) {
       this.cartService.addToCart(this.product);
       this.showCartNotification(`${this.product.name} added to cart`);
+    }
+  }
+
+  toggleLike(): void {
+    if (this.product) {
+      this.product.isLiked = !this.product.isLiked;
+      if (this.product.isLiked) {
+        this.favoriteService.addToFavorites(this.product);
+        this.showCartNotification(`${this.product.name} added to favorites`);
+      } else {
+        this.favoriteService.removeFromFavorites(this.product.id);
+        this.showCartNotification(`${this.product.name} removed from favorites`);
+      }
     }
   }
 
@@ -68,6 +76,7 @@ export class ProductDetailComponent implements OnInit {
       this.showNotification = false;
     }, 3000);
   }
+
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) this.fetchProduct(id);
@@ -78,10 +87,10 @@ export class ProductDetailComponent implements OnInit {
       next: (product) => {
         this.product = {
           ...product,
-          displayPrice: product.discount_price || product.price
+          displayPrice: product.discount_price || product.price,
+          isLiked: this.favoriteService.isInFavorites(product.id)
         };
         
-        // Основное изображение с бэкенда + статические
         this.productImages = [
           product.images[0].startsWith('http') 
             ? product.images[0] 
@@ -98,27 +107,33 @@ export class ProductDetailComponent implements OnInit {
   selectImage(index: number): void {
     this.selectedImageIndex = index;
   }
-getScreenSize(): string {
-  const sizeChar = this.product.characteristics?.find(c => 
-    c.characteristic.toLowerCase().includes('диагональ')
-  );
-  return sizeChar ? sizeChar.value : '6.7'; // Возвращаем значение в дюймах
-}
 
-getCpuInfo(): string {
-  const cpuChar = this.product.characteristics?.find(c => 
-    c.characteristic.toLowerCase().includes('процессор')
-  );
-  return cpuChar ? `${this.product.brand} ${cpuChar.value}` : 'Apple A16 Bionic';
-}
+  getScreenSize(): string {
+    if (!this.product) return '6.7';
+    const sizeChar = this.product.characteristics?.find(c => 
+      c.characteristic.toLowerCase().includes('диагональ')
+    );
+    return sizeChar ? sizeChar.value : '6.7'; 
+  }
 
-getBatteryCapacity(): string {
-  const batteryChar = this.product.characteristics?.find(c => 
-    c.characteristic.toLowerCase().includes('аккумулятор')
-  );
-  return batteryChar ? batteryChar.value : '4323';
-}
+  getCpuInfo(): string {
+    if (!this.product) return 'Apple A16 Bionic';
+    const cpuChar = this.product.characteristics?.find(c => 
+      c.characteristic.toLowerCase().includes('процессор')
+    );
+    return cpuChar ? `${this.product.brand} ${cpuChar.value}` : 'Apple A16 Bionic';
+  }
+
+  getBatteryCapacity(): string {
+    if (!this.product) return '4323';
+    const batteryChar = this.product.characteristics?.find(c => 
+      c.characteristic.toLowerCase().includes('аккумулятор')
+    );
+    return batteryChar ? batteryChar.value : '4323';
+  }
+
   getCharacteristicValue(name: string): string {
+    if (!this.product) return 'N/A';
     const char = this.product.characteristics?.find(c => 
       c.characteristic.toLowerCase().includes(name.toLowerCase())
     );

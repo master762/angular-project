@@ -2,27 +2,27 @@
 <section>
   <div class="favorite">
     <h1 class="abel">Favorite</h1>
+    <div *ngIf="favoriteItems.length === 0" class="empty-favorites">
+      <p class="abeezee">Your favorites list is empty</p>
+    </div>
     <div class="items">
-      <div class="item">
+      <div class="item" *ngFor="let product of favoriteItems">
         <div class="image">
-          <img src="/img/appleairpods.png" alt="" />
+          <img [src]="getProductImage(product)" [alt]="product.name" />
         </div>
         <div class="text">
-          <h2 class="abeezee">AirPods Max Silver</h2>
-          <p class="abel">#53459358345</p>
+          <h2 class="abeezee">{{product.brand}} {{product.name}}</h2>
+          <p class="abel">#{{product.id}}</p>
+          <div class="price">
+            <p class="abeezee">{{product.displayPrice | currency:'USD':'symbol':'1.0-0'}}</p>
+            <p *ngIf="product.discount_price" class="abel">{{product.price | currency:'USD':'symbol':'1.0-0'}}</p>
+          </div>
         </div>
+        <button class="remove-btn" (click)="removeFromFavorites(product.id)">
+          <span class="abeezee">Remove</span>
+        </button>
       </div>
-      <div class="item">
-        <div class="image">
-          <img src="/img/apple-wath.png" alt="" />
-        </div>
-        <div class="text">
-          <h2 class="abeezee">
-            Apple Watch Series 9 GPS 41mm Starlight Aluminium
-          </h2>
-          <p class="abel">#63632324</p>
-        </div>
-      </div>
+
     </div>
   </div>
 </section>

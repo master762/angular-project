@@ -59,14 +59,14 @@ export class CartService {
 
   removeFromCart(productId: number): void {
     this.cartItems = this.cartItems.filter(item => item.product.id !== productId);
-    this.saveCart(); // Добавляем сохранение
+    this.saveCart(); 
   }
 
   updateQuantity(productId: number, quantity: number): void {
     const item = this.cartItems.find(item => item.product.id === productId);
     if (item) {
-      item.quantity = Math.max(1, Math.min(quantity, 10)); // Ограничиваем от 1 до 10
-      this.saveCart(); // Добавляем сохранение
+      item.quantity = Math.max(1, Math.min(quantity, 10)); 
+      this.saveCart(); 
     }
   }
 
@@ -92,6 +92,6 @@ export class CartService {
 
   clearCart(): void {
     this.cartItems = [];
-    this.saveCart(); // Добавляем сохранение
+    this.saveCart(); 
   }
 }

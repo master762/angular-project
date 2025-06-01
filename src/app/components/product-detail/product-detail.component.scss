@@ -320,3 +320,23 @@ h2 {
     }
   }
 }
+.favorite-notification {
+  position: fixed;
+  bottom: 80px; /* Располагаем выше уведомления корзины */
+  right: 20px;
+  background: #ff5722;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 5px;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.3s ease-out;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  &::before {
+    content: "❤";
+    font-size: 1.2em;
+  }
+}
