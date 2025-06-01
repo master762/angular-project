@@ -4,67 +4,30 @@
     <h1 class="abel">Shopping Cart</h1>
     <div class="grid">
       <div class="items">
-        <div class="item">
+        <div class="item" *ngFor="let item of cartService.getCartItems()">
+          <!-- cart.component.html -->
           <div class="image">
-            <img src="/img/Iphone.png" alt="" />
+            <img [src]="getProductImage(item.product)" [alt]="item.product.name" />
           </div>
           <div class="text">
-            <h2 class="abeezee">Apple iPhone 14 Pro Max 128Gb Deep Purple</h2>
-            <p class="abel">#25139526913984</p>
+            <h2 class="abeezee">{{item.product.brand}} {{item.product.name}}</h2>
+            <p class="abel">#{{item.product.id}}</p>
           </div>
           <div class="controls">
             <div class="counter">
-              <button>-</button>
-              <span class="abeezee">1</span>
-              <button>+</button>
+              <button (click)="decrementQuantity(item.product.id)">-</button>
+              <span class="abeezee">{{item.quantity}}</span>
+              <button (click)="incrementQuantity(item.product.id)">+</button>
             </div>
             <div class="price">
-              <p class="abeezee">$1399</p>
-              <span>X</span>
+              <p class="abeezee">{{(item.product.displayPrice || item.product.price) * item.quantity |
+                currency:'USD':'symbol':'1.0-0'}}</p>
+              <span (click)="removeItem(item.product.id)">X</span>
             </div>
           </div>
         </div>
-        <div class="item">
-          <div class="image">
-            <img src="/img/appleairpods.png" alt="" />
-          </div>
-          <div class="text">
-            <h2 class="abeezee">AirPods Max Silver</h2>
-            <p class="abel">#53459358345</p>
-          </div>
-          <div class="controls">
-            <div class="counter">
-              <button>-</button>
-              <span class="abeezee">1</span>
-              <button>+</button>
-            </div>
-            <div class="price">
-              <p class="abeezee">$549</p>
-              <span>X</span>
-            </div>
-          </div>
-        </div>
-        <div class="item">
-          <div class="image">
-            <img src="/img/apple-wath.png" alt="" />
-          </div>
-          <div class="text">
-            <h2 class="abeezee">
-              Apple Watch Series 9 GPS 41mm Starlight Aluminium
-            </h2>
-            <p class="abel">#63632324</p>
-          </div>
-          <div class="controls">
-            <div class="counter">
-              <button>-</button>
-              <span class="abeezee">1</span>
-              <button>+</button>
-            </div>
-            <div class="price">
-              <p class="abeezee">$399</p>
-              <span>X</span>
-            </div>
-          </div>
+        <div *ngIf="cartService.getCartItems().length === 0" class="empty-cart">
+          <p class="abeezee">Your cart is empty</p>
         </div>
       </div>
       <div class="form">
@@ -83,22 +46,24 @@
         <div class="formPrice">
           <div>
             <p class="abeezee">Subtotal</p>
-            <p class="abeezee">$2347</p>
+            <p class="abeezee">{{cartService.getSubtotal() | currency:'USD':'symbol':'1.0-0'}}</p>
           </div>
           <div>
             <p class="abel">Estimated Tax</p>
-            <p class="abeezee">$50</p>
+            <p class="abeezee">{{cartService.getTax() | currency:'USD':'symbol':'1.0-0'}}</p>
           </div>
           <div>
             <p class="abel">Estimated shipping & Handling</p>
-            <p class="abeezee">$29</p>
+            <p class="abeezee">{{cartService.getShipping() | currency:'USD':'symbol':'1.0-0'}}</p>
           </div>
           <div>
             <p class="abeezee">Total</p>
-            <p class="abeezee">$2426</p>
+            <p class="abeezee">{{cartService.getTotal() | currency:'USD':'symbol':'1.0-0'}}</p>
           </div>
         </div>
-        <button class="btn"><span class="abeezee">Checkout</span></button>
+        <button class="btn" (click)="checkout()" [disabled]="cartService.getCartItems().length === 0">
+          <span class="abeezee">Checkout</span>
+        </button>
       </div>
     </div>
   </div>

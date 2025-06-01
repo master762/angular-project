@@ -149,7 +149,16 @@
     font-style: italic;
     font-size: 16px;
     line-height: 24px;
+    transition: all 0.3s ease;
     cursor: pointer;
+    &.added {
+      background-color: #4caf50;
+      color: white;
+
+      &:hover {
+        background-color: #4caf50;
+      }
+    }
 
     &:nth-child(1) {
       background: transparent;
@@ -278,5 +287,36 @@ h2 {
   img {
     width: 24px;
     height: 24px;
+  }
+}
+.cart-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #4caf50;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 5px;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.3s ease-out;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  &::before {
+    content: "✓";
+    font-size: 1.2em;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
   }
 }

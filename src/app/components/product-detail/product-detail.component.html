@@ -1,6 +1,9 @@
 <app-header></app-header>
 <section class="product">
     <div class="container">
+        <div *ngIf="showNotification" class="cart-notification">
+            {{notificationMessage}}
+        </div>
         <div class="flex">
             <div class="item">
                 <div class="manyPhoto">
@@ -71,11 +74,15 @@
                     </p>
                 </div>
                 <div class="btns">
-                    <button (click)="toggleLike()">
-                        <span class="abeezee">Add to Wishlist</span>
+                    <button (click)="toggleLike()" [class.liked]="product.isLiked">
+                        <span class="abeezee">
+                            {{product.isLiked ? 'Added to Wishlist' : 'Add to Wishlist'}}
+                        </span>
                     </button>
-                    <button>
-                        <span class="abeezee">Add to Cart</span>
+                    <button (click)="addToCart()" [class.added]="isAddedToCart">
+                        <span class="abeezee">
+                            {{isAddedToCart ? 'Added to Cart!' : 'Add to Cart'}}
+                        </span>
                     </button>
                 </div>
                 <div class="sideInfo">

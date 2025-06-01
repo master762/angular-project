@@ -6,6 +6,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http'; // Доба
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
 import { RelatedProductsComponent } from '../related-products/related-products.component';
+import { CartService } from '../../cart.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -23,6 +24,9 @@ import { RelatedProductsComponent } from '../related-products/related-products.c
   styleUrls: ['./product-detail.component.scss']
 })
 export class ProductDetailComponent implements OnInit {
+    isAddedToCart = false;
+  showNotification = false;
+  notificationMessage = '';
   Math = Math;
   toggleLike(): void {
   if (this.product) {
@@ -42,8 +46,28 @@ export class ProductDetailComponent implements OnInit {
     '/img/phone-demo3.jpg'
   ];
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {}
+ constructor(
+  private route: ActivatedRoute,
+  private http: HttpClient,
+  
+   private cartService: CartService
+  ) {}
 
+  addToCart(): void {
+    if (this.product) {
+      this.cartService.addToCart(this.product);
+      this.showCartNotification(`${this.product.name} added to cart`);
+    }
+  }
+
+  private showCartNotification(message: string): void {
+    this.notificationMessage = message;
+    this.showNotification = true;
+    
+    setTimeout(() => {
+      this.showNotification = false;
+    }, 3000);
+  }
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) this.fetchProduct(id);
