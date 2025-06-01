@@ -15,12 +15,16 @@
       </div>
     </div>
     <div class="icons">
-      <button>
-        <img src="/img/like.svg" alt="like" />
-      </button>
-      <button>
-        <img src="/img/cart.svg" alt="cart" />
-      </button>
+      <a [routerLink]="['/favorites']">
+        <button>
+          <img src="/img/like.svg" alt="like" />
+        </button>
+      </a>
+      <a [routerLink]="['/cart']">
+        <button>
+          <img src="/img/cart.svg" alt="cart" />
+        </button>
+      </a>
     </div>
     <button class="mobileBurger" (click)="toggleModal()">
       <img src="/img/Burger.svg" alt="" />
