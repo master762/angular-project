@@ -15,7 +15,12 @@ export class CartService {
   private loadCart(): void {
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
-      this.cartItems = JSON.parse(savedCart);
+      try {
+        this.cartItems = JSON.parse(savedCart);
+      } catch (e) {
+        console.error('Error parsing cart data', e);
+        this.cartItems = [];
+      }
     }
   }
 
@@ -30,7 +35,6 @@ export class CartService {
   }
 
   addToCart(product: Product): void {
-    
     const productCopy = {
       id: product.id,
       name: product.name,
@@ -39,7 +43,6 @@ export class CartService {
       displayPrice: product.displayPrice || product.price,
       images: product.images ? [...product.images] : [],
       brand: product.brand
-      
     };
 
     const existingItem = this.cartItems.find(item => item.product.id === productCopy.id);
@@ -56,12 +59,14 @@ export class CartService {
 
   removeFromCart(productId: number): void {
     this.cartItems = this.cartItems.filter(item => item.product.id !== productId);
+    this.saveCart(); // Добавляем сохранение
   }
 
   updateQuantity(productId: number, quantity: number): void {
     const item = this.cartItems.find(item => item.product.id === productId);
     if (item) {
-      item.quantity = quantity;
+      item.quantity = Math.max(1, Math.min(quantity, 10)); // Ограничиваем от 1 до 10
+      this.saveCart(); // Добавляем сохранение
     }
   }
 
@@ -87,5 +92,6 @@ export class CartService {
 
   clearCart(): void {
     this.cartItems = [];
+    this.saveCart(); // Добавляем сохранение
   }
 }
