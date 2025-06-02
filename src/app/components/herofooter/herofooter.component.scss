@@ -12,6 +12,7 @@ section {
   align-items: center;
   margin-top: 80px;
   position: relative;
+  overflow: clip;
   img {
     position: absolute;
     &:nth-child(1) {
@@ -60,6 +61,30 @@ section {
       font-size: 16px;
       font-style: italic;
       line-height: 24px;
+    }
+  }
+}
+@media (max-width: 1040px) {
+  section {
+    img {
+      &:nth-child(1) {
+        left: -20%;
+      }
+    }
+  }
+}
+@media (max-width: 740px) {
+  section {
+    z-index: -1;
+    img {
+      &:nth-child(1) {
+        left: -30%;
+        z-index: -1;
+      }
+      &:nth-child(2) {
+        right: -15%;
+        z-index: -1;
+      }
     }
   }
 }
