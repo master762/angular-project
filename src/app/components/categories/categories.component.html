@@ -3,47 +3,23 @@
         <div class="title">
             <h2 class="abeezee">Browse By Category</h2>
             <div class="arrows">
-                <button><img src="/img/navArrow.svg" alt="" /></button>
-                <button><img src="/img/navArrow.svg" alt="" /></button>
+                <button (click)="prev()" [disabled]="currentPosition() === 0">
+                    <img src="/img/navArrow.svg" alt="Previous" />
+                </button>
+                <button (click)="next()" [disabled]="currentPosition() + visibleCategories() >= categories().length">
+                    <img src="/img/navArrow.svg" alt="Next" [style.transform]="flipArrow('/img/navArrow.svg')" />
+                </button>
             </div>
         </div>
         <div class="categories">
+            @for (category of visibleItems(); track category.name) {
             <div class="category">
                 <div>
-                    <img src="/img/Phones.svg" alt="" />
-                    <p class="abeezee">Phones</p>
+                    <img [src]="category.icon" [alt]="category.name" />
+                    <p class="abeezee">{{category.name}}</p>
                 </div>
             </div>
-            <div class="category">
-                <div>
-                    <img src="/img/SmartWatches.svg" alt="" />
-                    <p class="abeezee">Smart Watches</p>
-                </div>
-            </div>
-            <div class="category">
-                <div>
-                    <img src="/img/Cameras.svg" alt="" />
-                    <p class="abeezee">Cameras</p>
-                </div>
-            </div>
-            <div class="category">
-                <div>
-                    <img src="/img/Headphones.svg" alt="" />
-                    <p class="abeezee">Headphones</p>
-                </div>
-            </div>
-            <div class="category">
-                <div>
-                    <img src="/img/Computers.svg" alt="" />
-                    <p class="abeezee">Computers</p>
-                </div>
-            </div>
-            <div class="category">
-                <div>
-                    <img src="/img/Gaming.svg" alt="" />
-                    <p class="abeezee">Gaming</p>
-                </div>
-            </div>
+            }
         </div>
     </div>
 </section>

@@ -21,4 +21,5 @@ export interface Product {
   description?: string;
   isLiked?: boolean;
   displayPrice?: number;
+  createdAt?: string; 
 }

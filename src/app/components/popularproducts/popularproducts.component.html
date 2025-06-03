@@ -14,7 +14,7 @@
         <div class="product">
             <img src="/img/item1.png" alt="" />
             <div class="text">
-                <h2 class="abeezee">Popular Products</h2>
+                <h2 class="abeezee">Ipad Pro</h2>
                 <p class="abeezee">
                     iPad combines a magnificent 10.2-inch Retina display, incredible
                     performance, multitasking and ease of use.
@@ -25,18 +25,7 @@
         <div class="product">
             <img src="/img/item2.png" alt="" />
             <div class="text">
-                <h2 class="abeezee">Popular Products</h2>
-                <p class="abeezee">
-                    iPad combines a magnificent 10.2-inch Retina display, incredible
-                    performance, multitaski тng and ease of use.
-                </p>
-                <button class="styledBtn"><span class="abeezee">Shop Now</span></button>
-            </div>
-        </div>
-        <div class="product">
-            <img src="/img/item3.png" alt="" />
-            <div class="text">
-                <h2 class="abeezee">Popular Products</h2>
+                <h2 class="abeezee">Samsung Galaxy</h2>
                 <p class="abeezee">
                     iPad combines a magnificent 10.2-inch Retina display, incredible
                     performance, multitasking and ease of use.
@@ -44,5 +33,37 @@
                 <button class="styledBtn"><span class="abeezee">Shop Now</span></button>
             </div>
         </div>
+        <div class="product">
+            <img src="/img/item3.png" alt="" />
+            <div class="text">
+                <h2 class="abeezee">Macbook Pro</h2>
+                <p class="abeezee">
+                    iPad combines a magnificent 10.2-inch Retina display, incredible
+                    performance, multitasking and ease of use.
+                </p>
+                <button class="styledBtn"><span class="abeezee">Shop Now</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="products-mobile" [style.background-color]="products()[currentSlide()].backgroundColor">
+        <div class="product-mobile">
+            <img [src]="products()[currentSlide()].image" [alt]="products()[currentSlide()].title" />
+            <div class="text">
+                <h2 class="abeezee">{{ products()[currentSlide()].title }}</h2>
+                <p class="abeezee">{{ products()[currentSlide()].description }}</p>
+                <button class="styledBtn"><span class="abeezee">Shop Now</span></button>
+            </div>
+        </div>
+
+        <div class="indicators">
+            @for (product of products(); track $index) {
+            <div class="indicator" (click)="goToSlide($index)"
+                [style.opacity]="currentSlide() === $index ? '1' : '0.4'"></div>
+            }
+        </div>
+
+        <button class="slide-btn prev" (click)="prevSlide()">‹</button>
+        <button class="slide-btn next" (click)="nextSlide()">›</button>
     </div>
 </section>

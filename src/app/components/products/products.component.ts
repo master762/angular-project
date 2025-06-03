@@ -3,18 +3,24 @@ import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Product } from '../../interfaces/product.interface';
-import { RouterLink} from '@angular/router';
+import { RouterLink } from '@angular/router';
+
+type SortField = 'rating' | 'price' | 'date';
+type SortDirection = 'asc' | 'desc';
+
+interface SortOption {
+  field: SortField;
+  label: string;
+}
+
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, FormsModule, CurrencyPipe, HttpClientModule,RouterLink,],
-  
+  imports: [CommonModule, FormsModule, CurrencyPipe, HttpClientModule, RouterLink],
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
 })
 export class ProductsComponent implements OnInit {
-  filters = ['New Arrival', 'Bestseller', 'Featured Products'];
-  activeFilter = this.filters[0];
   allProducts: Product[] = [];
   displayedProducts: Product[] = [];
   isLoading = true;
@@ -27,42 +33,75 @@ export class ProductsComponent implements OnInit {
   totalPages = 1;
   visiblePages: number[] = [];
 
+  // Сортировка
+  currentSort: { field: SortField; direction: SortDirection } | null = null;
+  isSortDropdownOpen = false;
+  sortOptions: SortOption[] = [
+    { field: 'rating', label: 'By rating' },
+    { field: 'price', label: 'By price' },
+    { field: 'date', label: 'By date' }
+  ];
+
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.fetchProducts();
   }
-  ratingSortDirection: 'asc' | 'desc' = 'desc';
-  toggleRatingSort(): void {
-    // Меняем направление сортировки
-    this.ratingSortDirection =
-      this.ratingSortDirection === 'desc' ? 'asc' : 'desc';
 
-    // Сортируем продукты
+  toggleSortDropdown(): void {
+    this.isSortDropdownOpen = !this.isSortDropdownOpen;
+  }
+
+  applySort(field: SortField): void {
+    if (this.currentSort?.field === field) {
+      this.currentSort.direction = this.currentSort.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.currentSort = { field, direction: 'desc' };
+    }
+
+    this.isSortDropdownOpen = false;
+    this.executeSort();
+  }
+
+  executeSort(): void {
+    if (!this.currentSort) return;
+
     this.allProducts.sort((a, b) => {
-      const ratingA = a.rating || 0;
-      const ratingB = b.rating || 0;
+      let valueA, valueB;
 
-      return this.ratingSortDirection === 'desc'
-        ? ratingB - ratingA
-        : ratingA - ratingB;
+      switch (this.currentSort!.field) {
+        case 'rating':
+          valueA = a.rating || 0;
+          valueB = b.rating || 0;
+          break;
+        case 'price':
+          valueA = a.discount_price ?? a.price;
+          valueB = b.discount_price ?? b.price;
+          break;
+        case 'date':
+          valueA = new Date(a.createdAt || '').getTime();
+          valueB = new Date(b.createdAt || '').getTime();
+          break;
+      }
+
+      return this.currentSort!.direction === 'desc' ? valueB - valueA : valueA - valueB;
     });
 
-    // Обновляем отображение
     this.currentPage = 1;
     this.updateDisplayedProducts();
     this.updateVisiblePages();
   }
+
+  getSortIcon(field: SortField): string {
+    if (this.currentSort?.field !== field) return '';
+    return this.currentSort.direction === 'asc' ? '↑' : '↓';
+  }
+
   fetchProducts(): void {
     this.http.get<Product[]>('http://localhost:1452/api/products/').subscribe({
       next: (data) => {
         this.allProducts = data.map((product) => ({
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          discount_price: product.discount_price,
-          images: product.images || [],
-          rating: product.rating,
+          ...product,
           isLiked: false,
           displayPrice: product.discount_price || product.price,
         }));
@@ -135,15 +174,13 @@ export class ProductsComponent implements OnInit {
   prevPage(): void {
     this.changePage(this.currentPage - 1);
   }
-  public getProductImage(product: Product): string {
+
+  getProductImage(product: Product): string {
+    if (!product.images || product.images.length === 0) return '';
     if (product.images[0].startsWith('http')) {
       return product.images[0];
     }
     return `${this.baseUrl}/${product.images[0]}`.replace(/([^:]\/)\/+/g, '$1');
-  }
-
-  setActiveFilter(filter: string): void {
-    this.activeFilter = filter;
   }
 
   toggleLike(product: Product): void {

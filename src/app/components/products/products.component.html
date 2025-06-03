@@ -3,20 +3,27 @@
   <div *ngIf="error" class="error">{{ error }}</div>
   <div *ngIf="!isLoading && !error">
     <div class="filter">
-
-    </div>
-    <div class="filter">
       <p class="abeezee">
         Selected Products: <span class="abeezee">{{ allProducts.length }}</span>
       </p>
-      <button class="rating" (click)="toggleRatingSort()" [class.active]="ratingSortDirection !== null">
-        <p class="abel">By rating</p>
-        <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg"
-          [class.asc]="ratingSortDirection === 'asc'">
-          <path d="M1 1L7 7L13 1" stroke="currentColor" />
-        </svg>
-      </button>
+
+      <div class="sort-dropdown">
+        <button class="dropdown-toggle" (click)="toggleSortDropdown()" [class.active]="isSortDropdownOpen">
+          {{ currentSort ? currentSort.field : 'Sort by' }}
+          <svg width="12" height="8" viewBox="0 0 12 8" [class.rotate]="isSortDropdownOpen">
+            <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" />
+          </svg>
+        </button>
+
+        <div class="dropdown-menu" *ngIf="isSortDropdownOpen">
+          <button *ngFor="let option of sortOptions" (click)="applySort(option.field)"
+            [class.active]="currentSort?.field === option.field">
+            {{ option.label }} {{ getSortIcon(option.field) }}
+          </button>
+        </div>
+      </div>
     </div>
+
     <div class="products">
       <div class="product" *ngFor="let product of displayedProducts">
         <div class="like" (click)="toggleLike(product)">
@@ -36,7 +43,6 @@
           <a [routerLink]="['/products', product.id]">
             <button><span class="abeezee">Buy Now</span></button>
           </a>
-
         </div>
       </div>
     </div>

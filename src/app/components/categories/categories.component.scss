@@ -19,6 +19,7 @@
   justify-content: space-between;
   align-items: center;
   button {
+    user-select: none;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -27,8 +28,18 @@
     height: 32px;
     border: none;
     background: transparent;
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &:not(:disabled):hover {
+      background-color: #f0f0f0;
+      border-radius: 50%;
+    }
   }
 }
+
 .arrows button:nth-child(2) img {
   transform: scaleX(-1);
 }
@@ -55,6 +66,10 @@
     background-color: #fafafa;
     border: 1px solid grey;
     box-shadow: 4px 4px 23px 5px rgba(0, 0, 0, 0.32);
+  }
+  img {
+    width: 48px;
+    height: 48px;
   }
 }
 .category div {

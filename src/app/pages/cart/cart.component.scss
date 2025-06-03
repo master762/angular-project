@@ -122,6 +122,7 @@ h1 {
   input {
     height: 100%;
     width: 100%;
+    background: transparent;
     border: none;
     outline: none;
     &::placeholder {
@@ -189,5 +190,16 @@ h1 {
     line-height: 24px;
     color: white;
     cursor: pointer;
+  }
+}
+@media (max-width: 800px) {
+  .grid {
+    display: block;
+  }
+}
+
+@media (max-width: 440px) {
+  .item {
+    flex-direction: column;
   }
 }

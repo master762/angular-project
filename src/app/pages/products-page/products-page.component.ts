@@ -1,10 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { HeaderComponent } from "../../components/header/header.component";
 import { FooterComponent } from "../../components/footer/footer.component";
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ProductsComponent } from "../../components/products/products.component";
-
 
 interface FilterItem {
   name: string;
@@ -19,13 +18,17 @@ interface FilterSection {
   items: FilterItem[];
   searchText: string;
 }
+
 @Component({
   selector: 'app-products-page',
+  standalone: true,
   imports: [HeaderComponent, FooterComponent, CommonModule, FormsModule, ProductsComponent],
   templateUrl: './products-page.component.html',
-  styleUrl: './products-page.component.scss'
+  styleUrls: ['./products-page.component.scss']
 })
 export class ProductsPageComponent {
+  showMobileFilters = signal(false);
+  
   sections: FilterSection[] = [
     {
       title: 'Brand',
@@ -49,25 +52,25 @@ export class ProductsPageComponent {
       items: [ { name: 'Realme', count: 35, checked: false, visible: true }, { name: 'Realme', count: 35, checked: false, visible: true }, { name: 'Realme', count: 35, checked: false, visible: true }],
       searchText: ''
     },
-     {
+    {
       title: 'Screen type',
       isOpen: false,
       items: [ { name: 'Realme', count: 35, checked: false, visible: true }, { name: 'Realme', count: 35, checked: false, visible: true }, { name: 'Realme', count: 35, checked: false, visible: true }],
       searchText: ''
     },
-     {
+    {
       title: 'Battery capacity',
       isOpen: false,
       items: [ { name: 'Realme', count: 35, checked: false, visible: true }, { name: 'Realme', count: 35, checked: false, visible: true }, { name: 'Realme', count: 35, checked: false, visible: true }],
       searchText: ''
     },
-     {
+    {
       title: 'Protection class',
       isOpen: false,
       items: [ { name: 'Realme', count: 35, checked: false, visible: true }, { name: 'Realme', count: 35, checked: false, visible: true }, { name: 'Realme', count: 35, checked: false, visible: true }],
       searchText: ''
     },
-     {
+    {
       title: 'Built-in memory',
       isOpen: false,
       items: [ { name: 'Realme', count: 35, checked: false, visible: true }, { name: 'Realme', count: 35, checked: false, visible: true }, { name: 'Realme', count: 35, checked: false, visible: true }],
@@ -93,5 +96,12 @@ export class ProductsPageComponent {
   hasNoVisibleItems(section: FilterSection): boolean {
     return section.items.length > 0 && section.items.every(item => !item.visible);
   }
-}
 
+  toggleMobileFilters(): void {
+    this.showMobileFilters.update(value => !value);
+  }
+
+  closeMobileFilters(): void {
+    this.showMobileFilters.set(false);
+  }
+}

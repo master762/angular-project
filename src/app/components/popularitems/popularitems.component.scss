@@ -101,7 +101,9 @@ section {
   img {
     position: absolute;
     top: 0;
-    left: 0;
+    left: -30px;
+    width: 400px;
+    height: auto;
   }
 }
 .right {
@@ -172,9 +174,6 @@ section {
       height: auto;
     }
   }
-  section {
-    margin-bottom: 500px;
-  }
 }
 @media (max-width: 1140px) {
   .vision img,
@@ -197,31 +196,115 @@ section {
 @media (max-width: 740px) {
   .bottom {
     flex-direction: column;
-    height: fit-content;
+    height: auto;
   }
   .airpods {
     width: 100%;
-    height: auto;
+    min-height: 376px;
+    justify-content: end;
+    text-align: center;
+    align-items: center;
+    padding: 40px 0;
+    img {
+      transform: translateX(-50%);
+      left: 50%;
+      top: 40px;
+      width: 192px;
+      height: 200px;
+    }
+    h2 {
+      width: 100%;
+      font-size: 34px;
+      font-style: normal;
+    }
+    p {
+      width: 100%;
+      font-size: 16px;
+      font-style: normal;
+    }
   }
   .vision {
     width: 100%;
-    height: auto;
-    flex-direction: column;
-    h2 {
-      margin: 0;
-    }
+    min-height: 368px;
+    justify-content: end;
+    text-align: center;
+    align-items: center;
+    padding: 40px 0;
     img {
-      left: 0;
-      top: 50%;
+      transform: translateX(-50%);
+      left: 50%;
+      top: 40px;
+      width: 326px;
+      height: auto;
+    }
+    h2 {
+      width: 100%;
+      font-size: 34px;
+      font-style: normal;
+    }
+    p {
+      width: 100%;
+      font-size: 16px;
+      font-style: normal;
     }
   }
   .left {
     height: auto;
   }
   .right {
-    height: auto;
+    width: 100%;
+    min-height: 480px;
+    justify-content: end;
+    text-align: center;
+    align-items: center;
+    padding: 40px 16px;
+    button {
+      width: 100%;
+    }
+    img {
+      transform: translateX(-50%);
+      left: 50%;
+      top: 40px;
+      width: 330px;
+      height: 200px;
+    }
+    h2 {
+      width: 100%;
+      font-size: 34px;
+      font-style: normal;
+    }
+    p {
+      width: 100%;
+      font-size: 16px;
+      font-style: normal;
+    }
   }
   .top {
+    justify-content: end;
+    text-align: center;
+    align-items: center;
+    padding: 40px 0;
+
+    h2 {
+      font-size: 34px;
+      margin-bottom: 8px;
+      font-style: normal;
+    }
+    p {
+      font-size: 16px;
+      font-style: normal;
+    }
+    img {
+      transform: translateX(-50%);
+      left: 50%;
+      top: 40px;
+      width: 200px;
+      height: 200px;
+    }
+    height: auto;
+    min-height: 400px;
+  }
+  .wrapper {
     height: auto;
   }
 }
